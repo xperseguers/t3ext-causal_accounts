@@ -1,4 +1,5 @@
 2012-01-26  Xavier Perseguers  <xavier@causal.ch>
 
+	* [TASK] Raise version to 1.0.0
 	* [TASK] Add debugging information and syslog messages
 	* [TASK] Kickstart the extension
