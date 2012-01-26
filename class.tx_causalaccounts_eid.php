@@ -63,12 +63,16 @@ class tx_causalaccounts_eid {
 			'admin=1 AND tx_openid_openid<>\'\''
 		);
 
-		$key = $this->config['preSharedKey'];
-		$data = json_encode($administrators);
-		$encrypted = mcrypt_encrypt(MCRYPT_RIJNDAEL_256, md5($key), $data, MCRYPT_MODE_CBC, md5(md5($key)));
-		$encrypted = base64_encode($encrypted);
+		if (count($administrators)) {
+			$key = $this->config['preSharedKey'];
+			$data = json_encode($administrators);
+			$encrypted = mcrypt_encrypt(MCRYPT_RIJNDAEL_256, md5($key), $data, MCRYPT_MODE_CBC, md5(md5($key)));
+			$encrypted = base64_encode($encrypted);
 
-		return $encrypted;
+			return $encrypted;
+		} else {
+			throw new RuntimeException('No administrators found', 1327586994);
+		}
 	}
 
 	/**
