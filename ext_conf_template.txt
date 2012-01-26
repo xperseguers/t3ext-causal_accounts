@@ -1,0 +1,11 @@
+	# cat=basic//10; type=string; label=Pre-Shared Key: This is the key that will be used to encrypt/decrypt data between master/slave site
+preSharedKey = c8b64%753fa102c0;79c9-39e854b-aca902ca52e0aba756c1a4f20&4dd=ed
+
+	# cat=basic//20; type= type=options[Master (Central Management)=M,Slave (Remote site)=S]; label=Mode: How should this TYPO3 website be used for
+mode = S
+
+	# cat=basic//30; type=string; label=Allowed IPs: Comma separated list of IPs that may access this extension (leave either empty or put each IP of remote sites)
+allowedIps =
+
+	# cat=basic//40; type=string; label=Master URL: URL of the master website (including eID parameter) to synchronize accounts from
+masterUrl = http://your-domain.tld/?eID=causal_accounts
