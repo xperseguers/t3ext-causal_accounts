@@ -51,6 +51,11 @@ class tx_causalaccounts_eid {
 		$this->init();
 
 		$allowedIps = t3lib_div::trimExplode(',', $this->config['allowedIps'], TRUE);
+
+		if ($this->config['debug']) {
+			t3lib_div::sysLog('Connection from ' . t3lib_div::getIndpEnv('REMOTE_ADDR'), self::$extKey);
+		}
+
 		if ($this->config['mode'] !== 'M' || (count($allowedIps) && !t3lib_div::inArray($allowedIps, t3lib_div::getIndpEnv('REMOTE_ADDR')))) {
 			$this->denyAccess();
 		}

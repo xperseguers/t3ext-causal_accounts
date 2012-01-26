@@ -9,3 +9,6 @@ allowedIps =
 
 	# cat=basic//40; type=string; label=Master URL: URL of the master website (including eID parameter) to synchronize accounts from
 masterUrl = http://your-domain.tld/?eID=causal_accounts
+
+	# cat=basic//50; type=boolean; label=Debug: Will write debugging information in syslog
+debug = 0

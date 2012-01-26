@@ -1,3 +1,4 @@
 2012-01-26  Xavier Perseguers  <xavier@causal.ch>
 
+	* [TASK] Add debugging information and syslog messages
 	* [TASK] Kickstart the extension

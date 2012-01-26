@@ -66,7 +66,11 @@ class tx_causalaccounts_synchronizationtask extends tx_scheduler_Task {
 				if (count($records)) {
 					$this->synchronizeUsers($records);
 					$success = TRUE;
+				} else {
+					t3lib_div::sysLog('No users to be synchronized', self::$extKey, 3);
 				}
+			} else {
+				t3lib_div::sysLog($response['errors'][0], self::$extKey, 3);
 			}
 		}
 
