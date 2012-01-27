@@ -65,7 +65,7 @@ class tx_causalaccounts_eid {
 		$administrators = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
 			'username, disable, realName, email, TSconfig, tx_openid_openid',
 			'be_users',
-			'admin=1 AND tx_openid_openid<>\'\''
+			'admin=1 AND tx_openid_openid<>\'\' AND deleted=0'
 		);
 
 		if (count($administrators)) {
