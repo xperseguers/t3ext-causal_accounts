@@ -1,5 +1,6 @@
 2012-02-25  Xavier Perseguers  <xavier@causal.ch>
 
+	* [TASK] Raise version to 1.1.0
 	* [FEATURE] Add support for short OpenID authentication
 
 2012-01-27  Xavier Perseguers  <xavier@causal.ch>
