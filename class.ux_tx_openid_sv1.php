@@ -293,7 +293,9 @@ class ux_tx_openid_sv1 extends tx_openid_sv1 {
 			if (strpos($openIDIdentifier, '.') === FALSE) {
 				// Short OpenID Authentication
 				$config = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['causal_accounts']);
-				$openIDIdentifier .= '.' . trim($config['openIdProvider']);
+				if (trim($config['openIdProvider']) !== '') {
+					$openIDIdentifier .= '.' . trim($config['openIdProvider']);
+				}
 			}
 			$escapedIdentifier = $GLOBALS['TYPO3_DB']->quoteStr($openIDIdentifier, $this->authenticationInformation['db_user']['table']);
 			$condition = 'tx_openid_openid IN (' .
