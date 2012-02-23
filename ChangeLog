@@ -1,3 +1,7 @@
+2012-02-25  Xavier Perseguers  <xavier@causal.ch>
+
+	* [FEATURE] Add support for short OpenID authentication
+
 2012-01-27  Xavier Perseguers  <xavier@causal.ch>
 
 	* [TASK] Do not synchronize deleted administrator accounts

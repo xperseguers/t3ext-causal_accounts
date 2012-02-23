@@ -10,5 +10,8 @@ allowedIps =
 	# cat=basic//40; type=string; label=Master URL: URL of the master website (including eID parameter) to synchronize accounts from
 masterUrl = http://your-domain.tld/?eID=causal_accounts
 
-	# cat=basic//50; type=boolean; label=Debug: Will write debugging information in syslog
+	# cat=basic//50; type=string; label=OpenID Provider: If set, will allow shorter form of OpenID (before the first dot) to be used for this specific provider (this correspond to the part after the first dot in an OpenID. E.g., "myopenid.com"
+openIdProvider =
+
+	# cat=basic//60; type=boolean; label=Debug: Will write debugging information in syslog
 debug = 0
