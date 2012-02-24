@@ -1,5 +1,7 @@
 2012-02-24  Xavier Perseguers  <xavier@causal.ch>
 
+	* [BUGFIX] Admin flag is not synchronized
+	* [TASK] Synchronize language for Backend users
 	* [TASK] Synchronize start- and end-time for Backend users
 
 2012-02-23  Xavier Perseguers  <xavier@causal.ch>

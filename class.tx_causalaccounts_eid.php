@@ -63,7 +63,7 @@ class tx_causalaccounts_eid {
 		$this->initTSFE();
 
 		$administrators = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
-			'username, disable, realName, email, TSconfig, starttime, endtime, tx_openid_openid',
+			'username, admin, disable, realName, email, TSconfig, starttime, endtime, lang, tx_openid_openid',
 			'be_users',
 			'admin=1 AND tx_openid_openid<>\'\' AND deleted=0'
 		);
