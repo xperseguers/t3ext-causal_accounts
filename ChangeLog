@@ -1,3 +1,7 @@
+2012-02-24  Xavier Perseguers  <xavier@causal.ch>
+
+	* [TASK] Synchronize start- and end-time for Backend users
+
 2012-02-23  Xavier Perseguers  <xavier@causal.ch>
 
 	* [TASK] Raise version to 1.1.0
