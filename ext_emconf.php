@@ -13,7 +13,7 @@
 $EM_CONF[$_EXTKEY] = array(
 	'title' => 'Central Account Management by Causal Sàrl',
 	'description' => 'This extension allows TYPO3 administrator accounts to be managed centrally.',
-	'category' => 'service',
+	'category' => 'services',
 	'author' => 'Xavier Perseguers',
 	'author_company' => 'Causal Sàrl',
 	'author_email' => 'xavier@causal.ch',
