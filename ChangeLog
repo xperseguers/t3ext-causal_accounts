@@ -1,3 +1,7 @@
+2012-03-07  Xavier Perseguers  <xavier@causal.ch>
+
+	* [TASK] Raise version to 1.2.0
+
 2012-03-04  Xavier Perseguers  <xavier@causal.ch>
 
 	* [BUGFIX] OpenID login fails if trailing slash is missing (synchro from TYPO3)
