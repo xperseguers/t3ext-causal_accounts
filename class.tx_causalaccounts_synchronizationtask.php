@@ -107,7 +107,11 @@ class tx_causalaccounts_synchronizationtask extends tx_scheduler_Task {
 			$user = array_intersect_key($user, $authorizedKeys);
 
 			if (empty($this->config['synchronizeDeletedAccounts']) || !$this->config['synchronizeDeletedAccounts']) {
-				$user['deleted'] = 0;
+				if (isset($user['deleted']) && $user['deleted']) {
+						// We do not authorize deleted user accounts to be synchronized
+						// on this website
+					continue;
+				}
 			} else {
 				$user['deleted'] = $user['deleted'] ? 1 : 0;
 			}
