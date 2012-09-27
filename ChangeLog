@@ -1,5 +1,6 @@
 2012-09-27  Xavier Perseguers  <xavier@causal.ch>
 
+	* [FEATURE] Allow deleted administrator accounts to be synchronized
 	* [TASK][CGL] Comment clean-up
 
 2012-03-07  Xavier Perseguers  <xavier@causal.ch>

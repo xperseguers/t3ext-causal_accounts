@@ -89,7 +89,29 @@ class tx_causalaccounts_synchronizationtask extends tx_scheduler_Task {
 			$instance = tx_saltedpasswords_salts_factory::getSaltingInstance(NULL, 'BE');
 		}
 
+		$authorizedKeys = array_flip(array(
+			'username',
+			'admin',
+			'disable',
+			'realName',
+			'email',
+			'TSconfig',
+			'starttime',
+			'endtime',
+			'lang',
+			'tx_openid_openid',
+			'deleted',
+		));
+
 		foreach ($users as $user) {
+			$user = array_intersect_key($user, $authorizedKeys);
+
+			if (empty($this->config['synchronizeDeletedAccounts']) || !$this->config['synchronizeDeletedAccounts']) {
+				$user['deleted'] = 0;
+			} else {
+				$user['deleted'] = $user['deleted'] ? 1 : 0;
+			}
+
 				// Generate a random password
 			$password = t3lib_div::generateRandomBytes(16);
 			$user['password'] = $instance ? $instance->getHashedPassword($password) : md5($password);

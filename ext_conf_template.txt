@@ -13,5 +13,8 @@ masterUrl = http://your-domain.tld/?eID=causal_accounts
 	# cat=basic//50; type=string; label=OpenID Provider: If set, will allow shorter form of OpenID (before the first dot) to be used for this specific provider (this correspond to the part after the first dot in an OpenID. E.g., "myopenid.com"
 openIdProvider =
 
-	# cat=basic//60; type=boolean; label=Debug: Will write debugging information in syslog
+	# cat=enable//10; type=boolean; label=Synchronize deleted accounts: Will synchronize deleted administrator accounts as well
+synchronizeDeletedAccounts = 0
+
+	# cat=enable//20; type=boolean; label=Debug: Will write debugging information in syslog
 debug = 0

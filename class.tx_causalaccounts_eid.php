@@ -62,10 +62,17 @@ class tx_causalaccounts_eid {
 
 		$this->initTSFE();
 
+		if (!empty($this->config['synchronizeDeletedAccounts']) && $this->config['synchronizeDeletedAccounts']) {
+			$additionalFields = ', deleted';
+			$additionalWhere = '';
+		} else {
+			$additionalFields = '';
+			$additionalWhere = ' AND deleted=0';
+		}
 		$administrators = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
-			'username, admin, disable, realName, email, TSconfig, starttime, endtime, lang, tx_openid_openid',
+			'username, admin, disable, realName, email, TSconfig, starttime, endtime, lang, tx_openid_openid' . $additionalFields,
 			'be_users',
-			'admin=1 AND tx_openid_openid<>\'\' AND deleted=0'
+			'admin=1 AND tx_openid_openid<>\'\'' . $additionalWhere
 		);
 
 		if (count($administrators)) {
