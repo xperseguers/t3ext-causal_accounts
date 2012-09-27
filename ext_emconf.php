@@ -3,7 +3,7 @@
 ########################################################################
 # Extension Manager/Repository config file for ext "causal_accounts".
 #
-# Auto generated 07-03-2012 14:10
+# Auto generated 27-09-2012 11:31
 #
 # Manual updates:
 # Only the data in the array - everything else is removed by next
@@ -42,7 +42,7 @@ $EM_CONF[$_EXTKEY] = array(
 		'suggests' => array(
 		),
 	),
-	'_md5_values_when_last_written' => 'a:9:{s:9:"ChangeLog";s:4:"4abf";s:31:"class.tx_causalaccounts_eid.php";s:4:"910a";s:47:"class.tx_causalaccounts_synchronizationtask.php";s:4:"e2ac";s:26:"class.ux_tx_openid_sv1.php";s:4:"8f18";s:16:"ext_autoload.php";s:4:"238c";s:21:"ext_conf_template.txt";s:4:"2739";s:12:"ext_icon.gif";s:4:"57bc";s:17:"ext_localconf.php";s:4:"49eb";s:14:"doc/manual.sxw";s:4:"9806";}',
+	'_md5_values_when_last_written' => 'a:9:{s:9:"ChangeLog";s:4:"d78d";s:31:"class.tx_causalaccounts_eid.php";s:4:"dff2";s:47:"class.tx_causalaccounts_synchronizationtask.php";s:4:"9334";s:26:"class.ux_tx_openid_sv1.php";s:4:"c382";s:16:"ext_autoload.php";s:4:"238c";s:21:"ext_conf_template.txt";s:4:"e480";s:12:"ext_icon.gif";s:4:"57bc";s:17:"ext_localconf.php";s:4:"49eb";s:14:"doc/manual.sxw";s:4:"9806";}',
 );
 
 ?>
