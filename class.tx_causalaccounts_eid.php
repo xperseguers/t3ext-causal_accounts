@@ -2,7 +2,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2012 Xavier Perseguers <xavier@causal.ch>
+ *  (c) 2012-2013 Xavier Perseguers <xavier@causal.ch>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -46,6 +46,7 @@ class tx_causalaccounts_eid {
 	 * Default action.
 	 *
 	 * @return array
+	 * @throws RuntimeException
 	 */
 	public function main() {
 		$this->init();
@@ -101,6 +102,7 @@ class tx_causalaccounts_eid {
 	 * Initializes this class.
 	 *
 	 * @return void
+	 * @throws RuntimeException
 	 */
 	protected function init() {
 		$this->config = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][self::$extKey]);
@@ -128,11 +130,6 @@ class tx_causalaccounts_eid {
 		TSpagegen::pagegenInit();
 	}
 
-}
-
-
-if (defined('TYPO3_MODE') && isset($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/causal_accounts/class.tx_causalaccounts_eid.php'])) {
-	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/causal_accounts/class.tx_causalaccounts_eid.php']);
 }
 
 /** @var $output tx_causalaccounts_eid */
