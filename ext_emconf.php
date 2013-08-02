@@ -3,7 +3,7 @@
 ########################################################################
 # Extension Manager/Repository config file for ext "causal_accounts".
 #
-# Auto generated 27-09-2012 11:31
+# Auto generated 16-05-2013 09:01
 #
 # Manual updates:
 # Only the data in the array - everything else is removed by next
@@ -30,11 +30,11 @@ $EM_CONF[$_EXTKEY] = array(
 	'modify_tables' => '',
 	'clearCacheOnLoad' => 0,
 	'lockType' => '',
-	'version' => '1.3.0',
+	'version' => '1.3.1',
 	'constraints' => array(
 		'depends' => array(
-			'php' => '5.2.0-0.0.0',
-			'typo3' => '4.5.0-6.2.99',
+			'php' => '5.3.3-0.0.0',
+			'typo3' => '4.5.0-6.1.99',
 			'openid' => '',
 		),
 		'conflicts' => array(
