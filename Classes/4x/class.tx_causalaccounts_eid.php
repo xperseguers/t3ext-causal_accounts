@@ -31,15 +31,13 @@
  * @author      Xavier Perseguers <xavier@causal.ch>
  * @copyright   Causal Sàrl
  * @license     http://www.gnu.org/copyleft/gpl.html
- * @version     SVN: $Id$
  */
 class tx_causalaccounts_eid {
 
+	/** @var string */
 	protected static $extKey = 'causal_accounts';
 
-	/**
-	 * @var array
-	 */
+	/** @var array */
 	protected $config;
 
 	/**
@@ -70,7 +68,7 @@ class tx_causalaccounts_eid {
 			$additionalFields = '';
 			$additionalWhere = ' AND deleted=0';
 		}
-		$administrators = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
+		$administrators = $this->getDatabaseConnection()->exec_SELECTgetRows(
 			'username, admin, disable, realName, email, TSconfig, starttime, endtime, lang, tx_openid_openid' . $additionalFields,
 			'be_users',
 			'admin=1 AND tx_openid_openid<>\'\'' . $additionalWhere
@@ -130,9 +128,18 @@ class tx_causalaccounts_eid {
 		TSpagegen::pagegenInit();
 	}
 
+	/**
+	 * Returns the database connection.
+	 *
+	 * @return t3lib_DB
+	 */
+	protected function getDatabaseConnection() {
+		return $GLOBALS['TYPO3_DB'];
+	}
+
 }
 
-/** @var $output tx_causalaccounts_eid */
+/** @var tx_causalaccounts_eid $output */
 $output = t3lib_div::makeInstance('tx_causalaccounts_eid');
 
 $ret = array(

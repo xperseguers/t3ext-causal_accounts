@@ -31,15 +31,13 @@
  * @author      Xavier Perseguers <xavier@causal.ch>
  * @copyright   Causal Sàrl
  * @license     http://www.gnu.org/copyleft/gpl.html
- * @version     SVN: $Id$
  */
 class tx_causalaccounts_synchronizationtask extends tx_scheduler_Task {
 
+	/** @var string */
 	protected static $extKey = 'causal_accounts';
 
-	/**
-	 * @var array
-	 */
+	/** @var array */
 	protected $config;
 
 	/**
@@ -108,33 +106,33 @@ class tx_causalaccounts_synchronizationtask extends tx_scheduler_Task {
 
 			if (empty($this->config['synchronizeDeletedAccounts']) || !$this->config['synchronizeDeletedAccounts']) {
 				if (isset($user['deleted']) && $user['deleted']) {
-						// We do not authorize deleted user accounts to be synchronized
-						// on this website
+					// We do not authorize deleted user accounts to be synchronized
+					// on this website
 					continue;
 				}
 			} else {
 				$user['deleted'] = $user['deleted'] ? 1 : 0;
 			}
 
-				// Generate a random password
+			// Generate a random password
 			$password = t3lib_div::generateRandomBytes(16);
 			$user['password'] = $instance ? $instance->getHashedPassword($password) : md5($password);
 
-			$localUser = $GLOBALS['TYPO3_DB']->exec_SELECTgetSingleRow(
+			$localUser = $this->getDatabaseConnection()->exec_SELECTgetSingleRow(
 				'uid',
 				'be_users',
-				'username=' . $GLOBALS['TYPO3_DB']->fullQuoteStr($user['username'], 'be_users')
+				'username=' . $this->getDatabaseConnection()->fullQuoteStr($user['username'], 'be_users')
 			);
 			if ($localUser) {
-					// Update existing user
-				$GLOBALS['TYPO3_DB']->exec_UPDATEquery(
+				// Update existing user
+				$this->getDatabaseConnection()->exec_UPDATEquery(
 					'be_users',
 					'uid=' . $localUser['uid'],
 					$user
 				);
 			} else {
-					// Create new user
-				$GLOBALS['TYPO3_DB']->exec_INSERTquery(
+				// Create new user
+				$this->getDatabaseConnection()->exec_INSERTquery(
 					'be_users',
 					$user
 				);
@@ -149,6 +147,15 @@ class tx_causalaccounts_synchronizationtask extends tx_scheduler_Task {
 	 */
 	protected function init() {
 		$this->config = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][self::$extKey]);
+	}
+
+	/**
+	 * Returns the database connection.
+	 *
+	 * @return t3lib_DB
+	 */
+	protected function getDatabaseConnection() {
+		return $GLOBALS['TYPO3_DB'];
 	}
 
 }
