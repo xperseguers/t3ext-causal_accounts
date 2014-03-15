@@ -160,5 +160,3 @@ header('Content-Length: ' . strlen($ajaxData));
 header('Content-Type: application/json');
 
 echo $ajaxData;
-
-?>

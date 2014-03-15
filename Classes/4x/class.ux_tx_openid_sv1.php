@@ -353,5 +353,3 @@ class ux_tx_openid_sv1 extends tx_openid_sv1 {
 	}
 
 }
-
-?>

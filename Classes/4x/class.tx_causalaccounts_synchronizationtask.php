@@ -159,5 +159,3 @@ class tx_causalaccounts_synchronizationtask extends tx_scheduler_Task {
 	}
 
 }
-
-?>

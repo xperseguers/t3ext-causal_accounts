@@ -4,7 +4,7 @@ namespace Causal\CausalAccounts\Task;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2012-2013 Xavier Perseguers <xavier@causal.ch>
+ *  (c) 2012-2014 Xavier Perseguers <xavier@causal.ch>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -163,5 +163,3 @@ class SynchronizationTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask {
 	}
 
 }
-
-?>

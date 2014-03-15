@@ -12,4 +12,5 @@ Known problems
 ==============
 
 .. note::
-	Please use the extension's bug tracker on GitHub to report bugs: https://github.com/xperseguers/t3x-causal_accounts
+	Please use the extension's bug tracker on GitHub to report
+	bugs: https://github.com/xperseguers/t3ext-causal_accounts/issues

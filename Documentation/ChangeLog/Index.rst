@@ -11,4 +11,4 @@
 ChangeLog
 =========
 
-Please read file ChangeLog at the root of the extension install directory.
+Please `read the online log <https://github.com/xperseguers/t3ext-causal_accounts/commits/master>`_.
