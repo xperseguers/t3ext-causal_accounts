@@ -15,7 +15,7 @@ Central Account Management
 .. only:: html
 
 	:Classification:
-		causal_account
+		causal_accounts
 
 	:Version:
 		|release|
@@ -24,7 +24,8 @@ Central Account Management
 		en
 
 	:Description:
-		This extension allows TYPO3 administrator accounts to be managed centrally.
+		This extension allows TYPO3 administrator accounts to be managed centrally and automatically synchronized with
+		remote websites using a secure link. No need for complex LDAP / ActiveDirectory infrastructure.
 
 	:Keywords:
 		openid, account, synchronization, advanced encryption standard (AES)
@@ -52,7 +53,7 @@ Central Account Management
 	**Other version of this document**
 
 	:PDF:
-		http://docs.typo3.org/typo3cms/extensions/causal_account/1.4.1/_pdf/
+		http://docs.typo3.org/typo3cms/extensions/causal_accounts/1.4.1/_pdf/
 
 
 	**Table of Contents**
