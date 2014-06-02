@@ -38,6 +38,8 @@ use \TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class SynchronizationTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask {
 
+	const LOCK_INTERVAL = 300; // 300s
+
 	/** @var string */
 	protected static $extKey = 'causal_accounts';
 
@@ -57,8 +59,13 @@ class SynchronizationTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask {
 		$success = FALSE;
 		$this->init();
 
+		$registry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('\TYPO3\CMS\Core\Registry');
+		$syncLock = $registry->get('causal_accounts', 'synchronisationLock');
 		$content = GeneralUtility::getUrl($this->config['masterUrl']);
-		if ($content) {
+		if ($content && ($syncLock === 0 || $syncLock < time())) {
+			$lockUntil = time() - $this->config['updateInterval'] + self::LOCK_INTERVAL;
+			$registry->set('causal_accounts', 'synchronisationLock', $lockUntil);
+
 			$response = json_decode($content, TRUE);
 			if ($response['success']) {
 				$key = $this->config['preSharedKey'];
@@ -74,8 +81,8 @@ class SynchronizationTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask {
 			} else {
 				GeneralUtility::sysLog($response['errors'][0], self::$extKey, 3);
 			}
+			$registry->set('causal_accounts', 'synchronisationLock', 0);
 		}
-
 		return $success;
 	}
 
