@@ -43,7 +43,14 @@ class ux_tx_openid_sv1 extends tx_openid_sv1 {
 	protected $openIDIdentifier;
 
 	/**
+	 *  Contains the configuration values.
+	 */
+	protected $config;
+
+	/**
 	 * Initializes authentication for this service.
+	 *
+	 * Synchronization is started before authentication.
 	 *
 	 * @param	string			$subType: Subtype for authentication (either "getUserFE" or "getUserBE")
 	 * @param	array			$loginData: Login data submitted by user and preprocessed by t3lib/class.t3lib_userauth.php
@@ -52,6 +59,9 @@ class ux_tx_openid_sv1 extends tx_openid_sv1 {
 	 * @return	void
 	 */
 	public function initAuth($subType, array $loginData, array $authenticationInformation, t3lib_userAuth &$parentObject) {
+		$this->initConfiguration();
+		$this->synchronize();
+
 		// Store login and authentication data
 		$this->loginData = $loginData;
 		$this->authenticationInformation = $authenticationInformation;
@@ -66,6 +76,39 @@ class ux_tx_openid_sv1 extends tx_openid_sv1 {
 			$this->openIDResponse = $openIDConsumer->complete($this->getReturnURL());
 		}
 		$this->parentObject = $parentObject;
+	}
+
+	/**
+	 * Synchronize user and set timestamp of last synchronisation.
+	 *
+	 * @return	array
+	 * @throws	\RuntimeException
+	 */
+	protected function synchronize() {
+		$synchronisationInterval = $this->config['updateInterval'];
+		$currentTimestamp = time();
+		$registry = t3lib_div::makeInstance('t3lib_Registry');
+		$lastSynchronisation = $registry->get('tx_causal_accounts', 'lastSynchronisation');
+		if (($currentTimestamp - $lastSynchronisation) >= $synchronisationInterval) {
+			$syncTask = new tx_causalaccounts_synchronizationtask();
+			if ($syncTask->execute()) {
+				$registry->set('tx_causal_accounts', 'lastSynchronisation', time());
+			}
+		}
+	}
+
+	/**
+	 * Inject extension configuration into $this->config
+	 *
+	 * @return	void
+	 * @throws	\RuntimeException
+	 */
+	protected function initConfiguration() {
+		$this->config = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['causal_accounts']);
+		if (!is_array($this->config) || !isset($this->config['updateInterval'])) {
+			// @TODO für 4.x anpassen, da dort keine namespaces verwendet werden
+			throw new RuntimeException('Extension "causal_accounts" is not configured', 1327582564);
+		}
 	}
 
 	/**

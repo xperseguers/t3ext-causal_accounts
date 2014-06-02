@@ -3,7 +3,7 @@
 /***************************************************************
  * Extension Manager/Repository config file for ext "causal_accounts".
  *
- * Auto generated 15-03-2014 10:54
+ * Auto generated 25-04-2014 14:02
  *
  * Manual updates:
  * Only the data in the array - everything else is removed by next
