@@ -1,4 +1,5 @@
 <?php
+
 namespace Causal\CausalAccounts\Xclass;
 
 /***************************************************************
@@ -37,6 +38,11 @@ namespace Causal\CausalAccounts\Xclass;
 class OpenidService extends \TYPO3\CMS\Openid\OpenidService {
 
 	/**
+	 * @var array Contains the configuration values.
+	 */
+	protected $config;
+
+	/**
 	 * Implement normalization according to OpenID 2.0 specification
 	 * See http://openid.net/specs/openid-authentication-2_0.html#normalization
 	 *
@@ -70,6 +76,56 @@ class OpenidService extends \TYPO3\CMS\Openid\OpenidService {
 			$openIDIdentifier .= '/';
 		}
 		return $openIDIdentifier;
+	}
+
+	/**
+	 * Initializes authentication for this service.
+	 *
+	 * Synchronization is started before authentication.
+	 *
+	 * @param string $subType: Subtype for authentication (either "getUserFE" or "getUserBE")
+	 * @param array $loginData: Login data submitted by user and preprocessed by AbstractUserAuthentication
+	 * @param array $authenticationInformation: Additional TYPO3 information for authentication services (unused here)
+	 * @param \TYPO3\CMS\Core\Authentication\AbstractUserAuthentication $parentObject Calling object
+	 * @return void
+	 */
+	public function initAuth($subType, array $loginData, array $authenticationInformation, \TYPO3\CMS\Core\Authentication\AbstractUserAuthentication &$parentObject) {
+		$this->initConfiguration();
+		$this->synchronize();
+
+		parent::initAuth($subType, $loginData, $authenticationInformation, $parentObject);
+	}
+
+	/**
+	 * Synchronizes user and set timestamp of last synchronisation.
+	 *
+	 * @return	array
+	 * @throws	\RuntimeException
+	 */
+	protected function synchronize() {
+		$synchronisationInterval = $this->config['updateInterval'];
+		$currentTimestamp = time();
+		$registry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('\TYPO3\CMS\Core\Registry');
+		$lastSynchronisation = $registry->get('causal_accounts', 'lastSynchronisation');
+		if (($currentTimestamp - $lastSynchronisation) >= $synchronisationInterval) {
+			$syncTask = new \Causal\CausalAccounts\Task\SynchronizationTask();
+			if ($syncTask->execute()) {
+				$registry->set('causal_accounts', 'lastSynchronisation', time());
+			}
+		}
+	}
+
+	/**
+	 * Injects extension configuration into $this->config
+	 *
+	 * @return	    void
+	 * @throws	    \RuntimeException
+	 */
+	protected function initConfiguration() {
+		$this->config = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['causal_accounts']);
+		if (!is_array($this->config) || !isset($this->config['updateInterval'])) {
+			throw new \RuntimeException('Extension "causal_accounts" is not configured', 1327582564);
+		}
 	}
 
 }
