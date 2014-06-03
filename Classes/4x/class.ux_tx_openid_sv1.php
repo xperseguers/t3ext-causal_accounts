@@ -38,12 +38,12 @@
 class ux_tx_openid_sv1 extends tx_openid_sv1 {
 
 	/**
-	 * OpenID identifier after it has been normalized.
+	 * @var string OpenID identifier after it has been normalized.
 	 */
 	protected $openIDIdentifier;
 
 	/**
-	 *  Contains the configuration values.
+	 * @var array Contains the configuration values.
 	 */
 	protected $config;
 
@@ -106,7 +106,6 @@ class ux_tx_openid_sv1 extends tx_openid_sv1 {
 	protected function initConfiguration() {
 		$this->config = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['causal_accounts']);
 		if (!is_array($this->config) || !isset($this->config['updateInterval'])) {
-			// @TODO für 4.x anpassen, da dort keine namespaces verwendet werden
 			throw new RuntimeException('Extension "causal_accounts" is not configured', 1327582564);
 		}
 	}

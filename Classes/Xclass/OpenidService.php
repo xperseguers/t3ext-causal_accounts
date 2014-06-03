@@ -38,7 +38,7 @@ namespace Causal\CausalAccounts\Xclass;
 class OpenidService extends \TYPO3\CMS\Openid\OpenidService {
 
 	/**
-	 *  Contains the configuration values.
+	 * @var array Contains the configuration values.
 	 */
 	protected $config;
 
@@ -97,7 +97,7 @@ class OpenidService extends \TYPO3\CMS\Openid\OpenidService {
 	}
 
 	/**
-	 * Synchronize user and set timestamp of last synchronisation.
+	 * Synchronizes user and set timestamp of last synchronisation.
 	 *
 	 * @return	array
 	 * @throws	\RuntimeException
@@ -116,7 +116,7 @@ class OpenidService extends \TYPO3\CMS\Openid\OpenidService {
 	}
 
 	/**
-	 * Inject extension configuration into $this->config
+	 * Injects extension configuration into $this->config
 	 *
 	 * @return	    void
 	 * @throws	    \RuntimeException
