@@ -37,6 +37,9 @@
  */
 class ux_tx_openid_sv1 extends tx_openid_sv1 {
 
+	/** @var string */
+	static protected $extKey = 'causal_accounts';
+
 	/**
 	 * @var string OpenID identifier after it has been normalized.
 	 */
@@ -59,8 +62,9 @@ class ux_tx_openid_sv1 extends tx_openid_sv1 {
 	 * @return	void
 	 */
 	public function initAuth($subType, array $loginData, array $authenticationInformation, t3lib_userAuth &$parentObject) {
-		$this->initConfiguration();
-		$this->synchronize();
+		if ($this->initConfiguration()) {
+			$this->synchronize();
+		}
 
 		// Store login and authentication data
 		$this->loginData = $loginData;
@@ -81,18 +85,22 @@ class ux_tx_openid_sv1 extends tx_openid_sv1 {
 	/**
 	 * Synchronize user and set timestamp of last synchronisation.
 	 *
-	 * @return	array
-	 * @throws	\RuntimeException
+	 * @return void
 	 */
 	protected function synchronize() {
-		$synchronisationInterval = $this->config['updateInterval'];
+		$synchronisationInterval = (int) $this->config['updateInterval'];
+		if ($synchronisationInterval <= 0) {
+			return;
+		}
 		$currentTimestamp = time();
+		/** @var t3lib_Registry $registry */
 		$registry = t3lib_div::makeInstance('t3lib_Registry');
-		$lastSynchronisation = $registry->get('tx_causal_accounts', 'lastSynchronisation');
+		$lastSynchronisation = $registry->get(static::$extKey, 'lastSynchronisation');
 		if (($currentTimestamp - $lastSynchronisation) >= $synchronisationInterval) {
-			$syncTask = new tx_causalaccounts_synchronizationtask();
+			/** @var tx_causalaccounts_synchronizationtask $syncTask */
+			$syncTask = t3lib_div::makeInstance('tx_causalaccounts_synchronizationtask');
 			if ($syncTask->execute()) {
-				$registry->set('tx_causal_accounts', 'lastSynchronisation', time());
+				$registry->set(static::$extKey, 'lastSynchronisation', time());
 			}
 		}
 	}
@@ -100,14 +108,14 @@ class ux_tx_openid_sv1 extends tx_openid_sv1 {
 	/**
 	 * Inject extension configuration into $this->config
 	 *
-	 * @return	void
-	 * @throws	\RuntimeException
+	 * @return bool TRUE if operation succeeded, otherwise FALSE
 	 */
 	protected function initConfiguration() {
-		$this->config = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['causal_accounts']);
+		$this->config = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][static::$extKey]);
 		if (!is_array($this->config) || !isset($this->config['updateInterval'])) {
-			throw new RuntimeException('Extension "causal_accounts" is not configured', 1327582564);
+			return FALSE;
 		}
+		return TRUE;
 	}
 
 	/**
@@ -364,7 +372,7 @@ class ux_tx_openid_sv1 extends tx_openid_sv1 {
 		if (!preg_match('#^https?://#', $openIDIdentifier)) {
 			if (strpos($openIDIdentifier, '.') === FALSE) {
 				// Short OpenID Authentication
-				$config = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['causal_accounts']);
+				$config = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][static::$extKey]);
 				if (trim($config['openIdProvider']) !== '') {
 					$openIDIdentifier .= '.' . trim($config['openIdProvider']);
 				}

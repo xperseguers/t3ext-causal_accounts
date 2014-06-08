@@ -37,6 +37,9 @@ namespace Causal\CausalAccounts\Xclass;
  */
 class OpenidService extends \TYPO3\CMS\Openid\OpenidService {
 
+	/** @var string */
+	static protected $extKey = 'causal_accounts';
+
 	/**
 	 * @var array Contains the configuration values.
 	 */
@@ -58,7 +61,7 @@ class OpenidService extends \TYPO3\CMS\Openid\OpenidService {
 		if (!preg_match('#^https?://#', $openIDIdentifier)) {
 			if (strpos($openIDIdentifier, '.') === FALSE) {
 				// Short OpenID Authentication
-				$config = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['causal_accounts']);
+				$config = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][static::$extKey]);
 				if (trim($config['openIdProvider']) !== '') {
 					$openIDIdentifier .= '.' . trim($config['openIdProvider']);
 				}
@@ -90,8 +93,9 @@ class OpenidService extends \TYPO3\CMS\Openid\OpenidService {
 	 * @return void
 	 */
 	public function initAuth($subType, array $loginData, array $authenticationInformation, \TYPO3\CMS\Core\Authentication\AbstractUserAuthentication &$parentObject) {
-		$this->initConfiguration();
-		$this->synchronize();
+		if ($this->initConfiguration()) {
+			$this->synchronize();
+		}
 
 		parent::initAuth($subType, $loginData, $authenticationInformation, $parentObject);
 	}
@@ -99,18 +103,22 @@ class OpenidService extends \TYPO3\CMS\Openid\OpenidService {
 	/**
 	 * Synchronizes user and set timestamp of last synchronisation.
 	 *
-	 * @return	array
-	 * @throws	\RuntimeException
+	 * @return void
 	 */
 	protected function synchronize() {
-		$synchronisationInterval = $this->config['updateInterval'];
+		$synchronisationInterval = (int) $this->config['updateInterval'];
+		if ($synchronisationInterval <= 0) {
+			return;
+		}
 		$currentTimestamp = time();
-		$registry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('\TYPO3\CMS\Core\Registry');
-		$lastSynchronisation = $registry->get('causal_accounts', 'lastSynchronisation');
+		/** @var \TYPO3\CMS\Core\Registry $registry */
+		$registry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Registry');
+		$lastSynchronisation = $registry->get(static::$extKey, 'lastSynchronisation');
 		if (($currentTimestamp - $lastSynchronisation) >= $synchronisationInterval) {
-			$syncTask = new \Causal\CausalAccounts\Task\SynchronizationTask();
+			/** @var \Causal\CausalAccounts\Task\SynchronizationTask $syncTask */
+			$syncTask = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Causal\\CausalAccounts\\Task\\SynchronizationTask');
 			if ($syncTask->execute()) {
-				$registry->set('causal_accounts', 'lastSynchronisation', time());
+				$registry->set(static::$extKey, 'lastSynchronisation', time());
 			}
 		}
 	}
@@ -118,14 +126,14 @@ class OpenidService extends \TYPO3\CMS\Openid\OpenidService {
 	/**
 	 * Injects extension configuration into $this->config
 	 *
-	 * @return	    void
-	 * @throws	    \RuntimeException
+	 * @return bool TRUE if operation succeeded, otherwise FALSE
 	 */
 	protected function initConfiguration() {
-		$this->config = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['causal_accounts']);
+		$this->config = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][static::$extKey]);
 		if (!is_array($this->config) || !isset($this->config['updateInterval'])) {
-			throw new \RuntimeException('Extension "causal_accounts" is not configured', 1327582564);
+			return FALSE;
 		}
+		return TRUE;
 	}
 
 }
