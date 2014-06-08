@@ -38,7 +38,7 @@
 class ux_tx_openid_sv1 extends tx_openid_sv1 {
 
 	/** @var string */
-	static protected $extKey = 'causal_accounts';
+	static protected $xclassExtKey = 'causal_accounts';
 
 	/**
 	 * @var string OpenID identifier after it has been normalized.
@@ -95,12 +95,12 @@ class ux_tx_openid_sv1 extends tx_openid_sv1 {
 		$currentTimestamp = time();
 		/** @var t3lib_Registry $registry */
 		$registry = t3lib_div::makeInstance('t3lib_Registry');
-		$lastSynchronisation = $registry->get(static::$extKey, 'lastSynchronisation');
+		$lastSynchronisation = $registry->get(static::$xclassExtKey, 'lastSynchronisation');
 		if (($currentTimestamp - $lastSynchronisation) >= $synchronisationInterval) {
 			/** @var tx_causalaccounts_synchronizationtask $syncTask */
 			$syncTask = t3lib_div::makeInstance('tx_causalaccounts_synchronizationtask');
 			if ($syncTask->execute()) {
-				$registry->set(static::$extKey, 'lastSynchronisation', time());
+				$registry->set(static::$xclassExtKey, 'lastSynchronisation', time());
 			}
 		}
 	}
@@ -111,7 +111,7 @@ class ux_tx_openid_sv1 extends tx_openid_sv1 {
 	 * @return bool TRUE if operation succeeded, otherwise FALSE
 	 */
 	protected function initConfiguration() {
-		$this->config = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][static::$extKey]);
+		$this->config = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][static::$xclassExtKey]);
 		if (!is_array($this->config) || !isset($this->config['updateInterval'])) {
 			return FALSE;
 		}
@@ -372,7 +372,7 @@ class ux_tx_openid_sv1 extends tx_openid_sv1 {
 		if (!preg_match('#^https?://#', $openIDIdentifier)) {
 			if (strpos($openIDIdentifier, '.') === FALSE) {
 				// Short OpenID Authentication
-				$config = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][static::$extKey]);
+				$config = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][static::$xclassExtKey]);
 				if (trim($config['openIdProvider']) !== '') {
 					$openIDIdentifier .= '.' . trim($config['openIdProvider']);
 				}
