@@ -38,7 +38,7 @@ namespace Causal\CausalAccounts\Xclass;
 class OpenidService extends \TYPO3\CMS\Openid\OpenidService {
 
 	/** @var string */
-	static protected $extKey = 'causal_accounts';
+	static protected $xclassExtKey = 'causal_accounts';
 
 	/**
 	 * @var array Contains the configuration values.
@@ -61,7 +61,7 @@ class OpenidService extends \TYPO3\CMS\Openid\OpenidService {
 		if (!preg_match('#^https?://#', $openIDIdentifier)) {
 			if (strpos($openIDIdentifier, '.') === FALSE) {
 				// Short OpenID Authentication
-				$config = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][static::$extKey]);
+				$config = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][static::$xclassExtKey]);
 				if (trim($config['openIdProvider']) !== '') {
 					$openIDIdentifier .= '.' . trim($config['openIdProvider']);
 				}
@@ -113,12 +113,12 @@ class OpenidService extends \TYPO3\CMS\Openid\OpenidService {
 		$currentTimestamp = time();
 		/** @var \TYPO3\CMS\Core\Registry $registry */
 		$registry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Registry');
-		$lastSynchronisation = $registry->get(static::$extKey, 'lastSynchronisation');
+		$lastSynchronisation = $registry->get(static::$xclassExtKey, 'lastSynchronisation');
 		if (($currentTimestamp - $lastSynchronisation) >= $synchronisationInterval) {
 			/** @var \Causal\CausalAccounts\Task\SynchronizationTask $syncTask */
 			$syncTask = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Causal\\CausalAccounts\\Task\\SynchronizationTask');
 			if ($syncTask->execute()) {
-				$registry->set(static::$extKey, 'lastSynchronisation', time());
+				$registry->set(static::$xclassExtKey, 'lastSynchronisation', time());
 			}
 		}
 	}
@@ -129,7 +129,7 @@ class OpenidService extends \TYPO3\CMS\Openid\OpenidService {
 	 * @return bool TRUE if operation succeeded, otherwise FALSE
 	 */
 	protected function initConfiguration() {
-		$this->config = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][static::$extKey]);
+		$this->config = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][static::$xclassExtKey]);
 		if (!is_array($this->config) || !isset($this->config['updateInterval'])) {
 			return FALSE;
 		}
