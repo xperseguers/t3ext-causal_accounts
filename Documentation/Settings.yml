@@ -6,8 +6,8 @@
 conf.py:
   copyright: 2012-2014
   project: Central Account Management
-  version: 1.4
-  release: 1.4.1
+  version: 1.5
+  release: 1.5.0
   latex_documents:
   - - Index
     - causal_accounts.tex
@@ -18,4 +18,7 @@ conf.py:
     papersize: a4paper
     pointsize: 10pt
     preamble: \usepackage{typo3}
+  html_theme_options:
+    github_repository: xperseguers/t3ext-causal_accounts
+    github_branch: master
 ...
