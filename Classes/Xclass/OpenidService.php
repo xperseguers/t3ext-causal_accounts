@@ -40,6 +40,9 @@ class OpenidService extends \TYPO3\CMS\Openid\OpenidService {
 	/** @var string */
 	static protected $xclassExtKey = 'causal_accounts';
 
+	/** @var string */
+	static protected $xclassPackage = 'tx_causalaccounts';
+
 	/**
 	 * @var array Contains the configuration values.
 	 */
@@ -113,12 +116,12 @@ class OpenidService extends \TYPO3\CMS\Openid\OpenidService {
 		$currentTimestamp = time();
 		/** @var \TYPO3\CMS\Core\Registry $registry */
 		$registry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Registry');
-		$lastSynchronisation = $registry->get(static::$xclassExtKey, 'lastSynchronisation');
+		$lastSynchronisation = $registry->get(static::$xclassPackage, 'lastSynchronisation');
 		if (($currentTimestamp - $lastSynchronisation) >= $synchronisationInterval) {
 			/** @var \Causal\CausalAccounts\Task\SynchronizationTask $syncTask */
 			$syncTask = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Causal\\CausalAccounts\\Task\\SynchronizationTask');
 			if ($syncTask->execute()) {
-				$registry->set(static::$xclassExtKey, 'lastSynchronisation', time());
+				$registry->set(static::$xclassPackage, 'lastSynchronisation', time());
 			}
 		}
 	}

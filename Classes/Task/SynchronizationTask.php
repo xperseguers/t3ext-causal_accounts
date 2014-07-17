@@ -43,6 +43,9 @@ class SynchronizationTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask {
 	/** @var string */
 	protected static $extKey = 'causal_accounts';
 
+	/** @var string */
+	protected static $package = 'tx_causalaccounts';
+
 	/** @var array */
 	protected $config;
 
@@ -59,12 +62,13 @@ class SynchronizationTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask {
 		$success = FALSE;
 		$this->init();
 
+		/** @var \TYPO3\CMS\Core\Registry $registry */
 		$registry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('\TYPO3\CMS\Core\Registry');
-		$syncLock = $registry->get('causal_accounts', 'synchronisationLock');
+		$syncLock = $registry->get(static::$package, 'synchronisationLock');
 		$content = GeneralUtility::getUrl($this->config['masterUrl']);
 		if ($content && ($syncLock === 0 || $syncLock < time())) {
 			$lockUntil = time() - $this->config['updateInterval'] + self::LOCK_INTERVAL;
-			$registry->set('causal_accounts', 'synchronisationLock', $lockUntil);
+			$registry->set(static::$package, 'synchronisationLock', $lockUntil);
 
 			$response = json_decode($content, TRUE);
 			if ($response['success']) {
@@ -81,7 +85,7 @@ class SynchronizationTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask {
 			} else {
 				GeneralUtility::sysLog($response['errors'][0], self::$extKey, 3);
 			}
-			$registry->set('causal_accounts', 'synchronisationLock', 0);
+			$registry->set(static::$package, 'synchronisationLock', 0);
 		}
 		return $success;
 	}

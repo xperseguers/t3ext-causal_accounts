@@ -2,7 +2,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2012-2013 Xavier Perseguers <xavier@causal.ch>
+ *  (c) 2012-2014 Xavier Perseguers <xavier@causal.ch>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -39,6 +39,9 @@ class ux_tx_openid_sv1 extends tx_openid_sv1 {
 
 	/** @var string */
 	static protected $xclassExtKey = 'causal_accounts';
+
+	/** @var string */
+	static protected $xclassPackage = 'tx_causalaccounts';
 
 	/**
 	 * @var string OpenID identifier after it has been normalized.
@@ -95,12 +98,12 @@ class ux_tx_openid_sv1 extends tx_openid_sv1 {
 		$currentTimestamp = time();
 		/** @var t3lib_Registry $registry */
 		$registry = t3lib_div::makeInstance('t3lib_Registry');
-		$lastSynchronisation = $registry->get(static::$xclassExtKey, 'lastSynchronisation');
+		$lastSynchronisation = $registry->get(static::$xclassPackage, 'lastSynchronisation');
 		if (($currentTimestamp - $lastSynchronisation) >= $synchronisationInterval) {
 			/** @var tx_causalaccounts_synchronizationtask $syncTask */
 			$syncTask = t3lib_div::makeInstance('tx_causalaccounts_synchronizationtask');
 			if ($syncTask->execute()) {
-				$registry->set(static::$xclassExtKey, 'lastSynchronisation', time());
+				$registry->set(static::$xclassPackage, 'lastSynchronisation', time());
 			}
 		}
 	}
