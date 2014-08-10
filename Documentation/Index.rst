@@ -53,7 +53,7 @@ Central Account Management
 	**Other version of this document**
 
 	:PDF:
-		http://docs.typo3.org/typo3cms/extensions/causal_accounts/1.5.0/_pdf/
+		http://docs.typo3.org/typo3cms/extensions/causal_accounts/1.5.1/_pdf/
 
 
 	**Table of Contents**
