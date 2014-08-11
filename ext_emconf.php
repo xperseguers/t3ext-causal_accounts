@@ -36,6 +36,7 @@ $EM_CONF[$_EXTKEY] = array(
 			'php' => '5.3.3-5.5.99',
 			'typo3' => '4.5.0-6.2.99',
 			'openid' => '',
+			'scheduler' => '',
 		),
 		'conflicts' => array(
 		),
