@@ -92,7 +92,7 @@ class ux_tx_openid_sv1 extends tx_openid_sv1 {
 	 */
 	protected function synchronize() {
 		$synchronisationInterval = (int) $this->config['updateInterval'];
-		if ($synchronisationInterval <= 0) {
+		if ($synchronisationInterval <= 0 || TYPO3_MODE === 'FE') {
 			return;
 		}
 		$currentTimestamp = time();
