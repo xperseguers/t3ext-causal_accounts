@@ -65,7 +65,7 @@ class ux_tx_openid_sv1 extends tx_openid_sv1 {
 	 * @return	void
 	 */
 	public function initAuth($subType, array $loginData, array $authenticationInformation, t3lib_userAuth &$parentObject) {
-		if ($this->initConfiguration()) {
+		if (TYPO3_MODE === 'BE' && $this->initConfiguration()) {
 			$this->synchronize();
 		}
 
