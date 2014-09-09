@@ -96,7 +96,7 @@ class OpenidService extends \TYPO3\CMS\Openid\OpenidService {
 	 * @return void
 	 */
 	public function initAuth($subType, array $loginData, array $authenticationInformation, \TYPO3\CMS\Core\Authentication\AbstractUserAuthentication &$parentObject) {
-		if ($this->initConfiguration()) {
+		if (TYPO3_MODE === 'BE' && $this->initConfiguration()) {
 			$this->synchronize();
 		}
 

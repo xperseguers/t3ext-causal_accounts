@@ -58,14 +58,14 @@ class ux_tx_openid_sv1 extends tx_openid_sv1 {
 	 *
 	 * Synchronization is started before authentication.
 	 *
-	 * @param	string			$subType: Subtype for authentication (either "getUserFE" or "getUserBE")
-	 * @param	array			$loginData: Login data submitted by user and preprocessed by t3lib/class.t3lib_userauth.php
-	 * @param	array			$authenticationInformation: Additional TYPO3 information for authentication services (unused here)
-	 * @param	t3lib_userAuth	$parentObject: Calling object
-	 * @return	void
+	 * @param string $subType: Subtype for authentication (either "getUserFE" or "getUserBE")
+	 * @param array $loginData: Login data submitted by user and preprocessed by t3lib/class.t3lib_userauth.php
+	 * @param array $authenticationInformation: Additional TYPO3 information for authentication services (unused here)
+	 * @param t3lib_userAuth $parentObject: Calling object
+	 * @return void
 	 */
 	public function initAuth($subType, array $loginData, array $authenticationInformation, t3lib_userAuth &$parentObject) {
-		if ($this->initConfiguration()) {
+		if (TYPO3_MODE === 'BE' && $this->initConfiguration()) {
 			$this->synchronize();
 		}
 
@@ -92,7 +92,7 @@ class ux_tx_openid_sv1 extends tx_openid_sv1 {
 	 */
 	protected function synchronize() {
 		$synchronisationInterval = (int) $this->config['updateInterval'];
-		if ($synchronisationInterval <= 0 || TYPO3_MODE === 'FE') {
+		if ($synchronisationInterval <= 0) {
 			return;
 		}
 		$currentTimestamp = time();
@@ -127,7 +127,7 @@ class ux_tx_openid_sv1 extends tx_openid_sv1 {
 	 * function makes sure that user cannot be authenticated by any other service
 	 * if user tries to use OpenID to authenticate.
 	 *
-	 * @return	mixed		User record (content of fe_users/be_users as appropriate for the current mode)
+	 * @return mixed User record (content of fe_users/be_users as appropriate for the current mode)
 	 */
 	public function getUser() {
 		$userRecord = NULL;
@@ -170,9 +170,9 @@ class ux_tx_openid_sv1 extends tx_openid_sv1 {
 	/**
 	 * Authenticates user using OpenID.
 	 *
-	 * @param	array		$userRecord	User record
-	 * @return	int		Code that shows if user is really authenticated.
-	 * @see	t3lib_userAuth::checkAuthentication()
+	 * @param array $userRecord User record
+	 * @return int Code that shows if user is really authenticated.
+	 * @see t3lib_userAuth::checkAuthentication()
 	 */
 	public function authUser(array $userRecord) {
 		$result = 100;	// 100 means "we do not know, continue"
@@ -219,8 +219,8 @@ class ux_tx_openid_sv1 extends tx_openid_sv1 {
 	/**
 	 * Gets user record for the user with the OpenID provided by the user
 	 *
-	 * @param	string		$openIDIdentifier	OpenID identifier to search for
-	 * @return	array		Database fields from the table that corresponds to the current login mode (FE/BE)
+	 * @param string $openIDIdentifier OpenID identifier to search for
+	 * @return array Database fields from the table that corresponds to the current login mode (FE/BE)
 	 */
 	protected function getUserRecord($openIDIdentifier) {
 		$record = NULL;
@@ -259,7 +259,7 @@ class ux_tx_openid_sv1 extends tx_openid_sv1 {
 	 * This function does not return on success. If it returns, it means something
 	 * went totally wrong with OpenID.
 	 *
-	 * @return	void
+	 * @return void
 	 */
 	protected function sendOpenIDRequest() {
 		$this->includePHPOpenIDLibrary();
@@ -325,7 +325,7 @@ class ux_tx_openid_sv1 extends tx_openid_sv1 {
 	 * the OpenID server, the user will be sent to this URL to complete
 	 * authentication process with the current site. We send it to our script.
 	 *
-	 * @return	string		Return URL
+	 * @return string Return URL
 	 */
 	protected function getReturnURL() {
 		if ($this->authenticationInformation['loginType'] == 'FE') {
