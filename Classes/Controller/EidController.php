@@ -116,13 +116,13 @@ class EidController {
 			GeneralUtility::_GP('id'),
 			''
 		);
+		$GLOBALS['TSFE'] = $tsfe;
 		$tsfe->connectToDB();
 		$tsfe->initFEuser();
 		$tsfe->checkAlternativeIdMethods();
 		$tsfe->determineId();
 		$tsfe->initTemplate();
 		$tsfe->getConfigArray();
-		$GLOBALS['TSFE'] = $tsfe;
 
 		// Get linkVars, absRefPrefix, etc
 		\TYPO3\CMS\Frontend\Page\PageGenerator::pagegenInit();
