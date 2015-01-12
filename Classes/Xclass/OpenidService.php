@@ -14,6 +14,8 @@ namespace Causal\CausalAccounts\Xclass;
  * The TYPO3 project - inspiring people to share!
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /**
  * Extends \TYPO3\CMS\Openid\OpenidService to support short OpenID authentication.
  *
@@ -104,11 +106,11 @@ class OpenidService extends \TYPO3\CMS\Openid\OpenidService {
 		}
 		$currentTimestamp = time();
 		/** @var \TYPO3\CMS\Core\Registry $registry */
-		$registry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Registry');
+		$registry = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Registry');
 		$lastSynchronisation = $registry->get(static::$xclassPackage, 'lastSynchronisation');
 		if (($currentTimestamp - $lastSynchronisation) >= $synchronisationInterval) {
 			/** @var \Causal\CausalAccounts\Task\SynchronizationTask $syncTask */
-			$syncTask = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Causal\\CausalAccounts\\Task\\SynchronizationTask');
+			$syncTask = GeneralUtility::makeInstance('Causal\\CausalAccounts\\Task\\SynchronizationTask');
 			if ($syncTask->execute()) {
 				$registry->set(static::$xclassPackage, 'lastSynchronisation', time());
 			}

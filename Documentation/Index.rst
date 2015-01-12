@@ -31,7 +31,7 @@ Central Account Management
 		openid, account, synchronization, advanced encryption standard (AES)
 
 	:Copyright:
-		2012-2014
+		2012-2015
 
 	:Author:
 		Xavier Perseguers

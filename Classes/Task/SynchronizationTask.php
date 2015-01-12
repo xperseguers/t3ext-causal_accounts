@@ -53,7 +53,7 @@ class SynchronizationTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask {
 		$this->init();
 
 		/** @var \TYPO3\CMS\Core\Registry $registry */
-		$registry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Registry');
+		$registry = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Registry');
 		$syncLock = $registry->get(static::$package, 'synchronisationLock');
 		$content = GeneralUtility::getUrl($this->config['masterUrl']);
 		if ($content && ($syncLock === 0 || $syncLock < time())) {

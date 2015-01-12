@@ -7,4 +7,3 @@ if (version_compare(TYPO3_version, '6.0.0', '<')) {
 	);
 }
 return $classMap;
-?>
