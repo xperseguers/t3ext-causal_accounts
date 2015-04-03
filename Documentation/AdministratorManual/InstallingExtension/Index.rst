@@ -56,7 +56,7 @@ Configure the extension for a remote website
 
 - Make sure the mode is set to  **Slave (Remote site)**
 
-- Specify the master website URL. If you master website is http://www.mycompany.org, then the master website URL is
+- Specify the master website URL. If your master website is http://www.mycompany.org, then the master website URL is
   http://www.mycompany.org/?eID=causal\_accounts
 
 - (optional) Configure short OpenID authentication. This allows users to authenticate with a shorter form of their
