@@ -22,110 +22,116 @@
  * @copyright   Causal Sàrl
  * @license     http://www.gnu.org/copyleft/gpl.html
  */
-class tx_causalaccounts_eid {
+class tx_causalaccounts_eid
+{
 
-	/** @var string */
-	protected static $extKey = 'causal_accounts';
+    /** @var string */
+    protected static $extKey = 'causal_accounts';
 
-	/** @var array */
-	protected $config;
+    /** @var array */
+    protected $config;
 
-	/**
-	 * Default action.
-	 *
-	 * @return array
-	 * @throws RuntimeException
-	 */
-	public function main() {
-		$this->init();
+    /**
+     * Default action.
+     *
+     * @return array
+     * @throws RuntimeException
+     */
+    public function main()
+    {
+        $this->init();
 
-		$allowedIps = t3lib_div::trimExplode(',', $this->config['allowedIps'], TRUE);
+        $allowedIps = t3lib_div::trimExplode(',', $this->config['allowedIps'], TRUE);
 
-		if ($this->config['debug']) {
-			t3lib_div::sysLog('Connection from ' . t3lib_div::getIndpEnv('REMOTE_ADDR'), self::$extKey);
-		}
+        if ($this->config['debug']) {
+            t3lib_div::sysLog('Connection from ' . t3lib_div::getIndpEnv('REMOTE_ADDR'), self::$extKey);
+        }
 
-		if ($this->config['mode'] !== 'M' || (count($allowedIps) && !t3lib_div::inArray($allowedIps, t3lib_div::getIndpEnv('REMOTE_ADDR')))) {
-			$this->denyAccess();
-		}
+        if ($this->config['mode'] !== 'M' || (count($allowedIps) && !t3lib_div::inArray($allowedIps, t3lib_div::getIndpEnv('REMOTE_ADDR')))) {
+            $this->denyAccess();
+        }
 
-		$this->initTSFE();
+        $this->initTSFE();
 
-		if (!empty($this->config['synchronizeDeletedAccounts']) && $this->config['synchronizeDeletedAccounts']) {
-			$additionalFields = ', deleted';
-			$additionalWhere = '';
-		} else {
-			$additionalFields = '';
-			$additionalWhere = ' AND deleted=0';
-		}
-		$administrators = $this->getDatabaseConnection()->exec_SELECTgetRows(
-			'username, admin, disable, realName, email, TSconfig, starttime, endtime, lang, tx_openid_openid' . $additionalFields,
-			'be_users',
-			'admin=1 AND tx_openid_openid<>\'\'' . $additionalWhere
-		);
+        if (!empty($this->config['synchronizeDeletedAccounts']) && $this->config['synchronizeDeletedAccounts']) {
+            $additionalFields = ', deleted';
+            $additionalWhere = '';
+        } else {
+            $additionalFields = '';
+            $additionalWhere = ' AND deleted=0';
+        }
+        $administrators = $this->getDatabaseConnection()->exec_SELECTgetRows(
+            'username, admin, disable, realName, email, TSconfig, starttime, endtime, lang, tx_openid_openid' . $additionalFields,
+            'be_users',
+            'admin=1 AND tx_openid_openid<>\'\'' . $additionalWhere
+        );
 
-		if (count($administrators)) {
-			$key = $this->config['preSharedKey'];
-			$data = json_encode($administrators);
-			$encrypted = mcrypt_encrypt(MCRYPT_RIJNDAEL_256, md5($key), $data, MCRYPT_MODE_CBC, md5(md5($key)));
-			$encrypted = base64_encode($encrypted);
+        if (count($administrators)) {
+            $key = $this->config['preSharedKey'];
+            $data = json_encode($administrators);
+            $encrypted = mcrypt_encrypt(MCRYPT_RIJNDAEL_256, md5($key), $data, MCRYPT_MODE_CBC, md5(md5($key)));
+            $encrypted = base64_encode($encrypted);
 
-			return $encrypted;
-		} else {
-			throw new RuntimeException('No administrators found', 1327586994);
-		}
-	}
+            return $encrypted;
+        } else {
+            throw new RuntimeException('No administrators found', 1327586994);
+        }
+    }
 
-	/**
-	 * Deny access to this module by pretending page was not found.
-	 *
-	 * @return void
-	 */
-	protected function denyAccess() {
-		header('HTTP/1.0 404 Not Found');
-		exit;
-	}
+    /**
+     * Deny access to this module by pretending page was not found.
+     *
+     * @return void
+     */
+    protected function denyAccess()
+    {
+        header('HTTP/1.0 404 Not Found');
+        exit;
+    }
 
-	/**
-	 * Initializes this class.
-	 *
-	 * @return void
-	 * @throws RuntimeException
-	 */
-	protected function init() {
-		$this->config = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][self::$extKey]);
-		if (!is_array($this->config)) {
-			throw new RuntimeException('Extension "' . self::$extKey . '" is not configured', 1327582564);
-		}
-	}
+    /**
+     * Initializes this class.
+     *
+     * @return void
+     * @throws RuntimeException
+     */
+    protected function init()
+    {
+        $this->config = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][self::$extKey]);
+        if (!is_array($this->config)) {
+            throw new RuntimeException('Extension "' . self::$extKey . '" is not configured', 1327582564);
+        }
+    }
 
-	/**
-	 * Initializes TSFE and sets $GLOBALS['TSFE'].
-	 *
-	 * @return void
-	 */
-	protected function initTSFE() {
-		$GLOBALS['TSFE'] = t3lib_div::makeInstance('tslib_fe', $GLOBALS['TYPO3_CONF_VARS'], t3lib_div::_GP('id'), '');
-		$GLOBALS['TSFE']->connectToDB();
-		$GLOBALS['TSFE']->initFEuser();
-		$GLOBALS['TSFE']->checkAlternativeIdMethods();
-		$GLOBALS['TSFE']->determineId();
-		$GLOBALS['TSFE']->getCompressedTCarray();
-		$GLOBALS['TSFE']->initTemplate();
-		$GLOBALS['TSFE']->getConfigArray();
+    /**
+     * Initializes TSFE and sets $GLOBALS['TSFE'].
+     *
+     * @return void
+     */
+    protected function initTSFE()
+    {
+        $GLOBALS['TSFE'] = t3lib_div::makeInstance('tslib_fe', $GLOBALS['TYPO3_CONF_VARS'], t3lib_div::_GP('id'), '');
+        $GLOBALS['TSFE']->connectToDB();
+        $GLOBALS['TSFE']->initFEuser();
+        $GLOBALS['TSFE']->checkAlternativeIdMethods();
+        $GLOBALS['TSFE']->determineId();
+        $GLOBALS['TSFE']->getCompressedTCarray();
+        $GLOBALS['TSFE']->initTemplate();
+        $GLOBALS['TSFE']->getConfigArray();
 
-		// Get linkVars, absRefPrefix, etc
-		TSpagegen::pagegenInit();
-	}
+        // Get linkVars, absRefPrefix, etc
+        TSpagegen::pagegenInit();
+    }
 
-	/**
-	 * Returns the database connection.
-	 *
-	 * @return t3lib_DB
-	 */
-	protected function getDatabaseConnection() {
-		return $GLOBALS['TYPO3_DB'];
-	}
+    /**
+     * Returns the database connection.
+     *
+     * @return t3lib_DB
+     */
+    protected function getDatabaseConnection()
+    {
+        return $GLOBALS['TYPO3_DB'];
+    }
 
 }
 
@@ -133,15 +139,15 @@ class tx_causalaccounts_eid {
 $output = t3lib_div::makeInstance('tx_causalaccounts_eid');
 
 $ret = array(
-	'success' => TRUE,
-	'data' => array(),
-	'errors' => array(),
+    'success' => TRUE,
+    'data' => array(),
+    'errors' => array(),
 );
 try {
-	$ret['data'] = $output->main();
+    $ret['data'] = $output->main();
 } catch (Exception $e) {
-	$ret['success'] = FALSE;
-	$ret['errors'][] = 'Error ' . $e->getCode() . ': ' . $e->getMessage();
+    $ret['success'] = FALSE;
+    $ret['errors'][] = 'Error ' . $e->getCode() . ': ' . $e->getMessage();
 }
 
 $ajaxData = json_encode($ret);

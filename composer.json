@@ -3,7 +3,14 @@
   "description": "This extension allows TYPO3 administrator accounts to be managed centrally and automatically synchronized with remote websites using a secure link. No need for complex LDAP / ActiveDirectory infrastructure.",
   "version": "1.7.0-dev",
   "type": "typo3-cms-extension",
-  "keywords": ["TYPO3 CMS", "OpenID", "account", "synchronization", "advanced encryption standard", "aes"],
+  "keywords": [
+    "TYPO3 CMS",
+    "OpenID",
+    "account",
+    "synchronization",
+    "advanced encryption standard",
+    "aes"
+  ],
   "homepage": "https://github.com/xperseguers/t3ext-causal_accounts",
   "license": "GPL-2.0+",
   "authors": [
@@ -20,6 +27,6 @@
     "typo3/cms-core": ">= 4.5.0, <= 7.99.99"
   },
   "support": {
-	"issues": "https://github.com/xperseguers/t3ext-causal_accounts/issues"
+    "issues": "https://github.com/xperseguers/t3ext-causal_accounts/issues"
   }
 }
