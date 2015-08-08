@@ -41,7 +41,7 @@ class tx_causalaccounts_eid
     {
         $this->init();
 
-        $allowedIps = t3lib_div::trimExplode(',', $this->config['allowedIps'], TRUE);
+        $allowedIps = t3lib_div::trimExplode(',', $this->config['allowedIps'], true);
 
         if ($this->config['debug']) {
             t3lib_div::sysLog('Connection from ' . t3lib_div::getIndpEnv('REMOTE_ADDR'), self::$extKey);
@@ -139,14 +139,14 @@ class tx_causalaccounts_eid
 $output = t3lib_div::makeInstance('tx_causalaccounts_eid');
 
 $ret = array(
-    'success' => TRUE,
+    'success' => true,
     'data' => array(),
     'errors' => array(),
 );
 try {
     $ret['data'] = $output->main();
 } catch (Exception $e) {
-    $ret['success'] = FALSE;
+    $ret['success'] = false;
     $ret['errors'][] = 'Error ' . $e->getCode() . ': ' . $e->getMessage();
 }
 

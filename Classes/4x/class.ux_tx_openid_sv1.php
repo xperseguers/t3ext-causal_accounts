@@ -69,7 +69,7 @@ class ux_tx_openid_sv1 extends tx_openid_sv1
         $this->openIDIdentifier = $this->normalizeOpenID($this->loginData['uname']);
 
         // If we are here after authentication by the OpenID server, get its response.
-        if (t3lib_div::_GP('tx_openid_mode') == 'finish' && $this->openIDResponse == NULL) {
+        if (t3lib_div::_GP('tx_openid_mode') === 'finish' && $this->openIDResponse == null) {
             $this->includePHPOpenIDLibrary();
             $openIDConsumer = $this->getOpenIDConsumer();
             $this->openIDResponse = $openIDConsumer->complete($this->getReturnURL());
@@ -104,15 +104,15 @@ class ux_tx_openid_sv1 extends tx_openid_sv1
     /**
      * Inject extension configuration into $this->config
      *
-     * @return bool TRUE if operation succeeded, otherwise FALSE
+     * @return bool true if operation succeeded, otherwise false
      */
     protected function initConfiguration()
     {
         $this->config = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][static::$xclassExtKey]);
         if (!is_array($this->config) || !isset($this->config['updateInterval'])) {
-            return FALSE;
+            return false;
         }
-        return TRUE;
+        return true;
     }
 
     /**
@@ -125,8 +125,8 @@ class ux_tx_openid_sv1 extends tx_openid_sv1
      */
     public function getUser()
     {
-        $userRecord = NULL;
-        if ($this->loginData['status'] == 'login') {
+        $userRecord = null;
+        if ($this->loginData['status'] === 'login') {
             if ($this->openIDResponse instanceof Auth_OpenID_ConsumerResponse) {
                 $GLOBALS['BACK_PATH'] = $this->getBackPath();
                 // We are running inside the OpenID return script
@@ -138,7 +138,7 @@ class ux_tx_openid_sv1 extends tx_openid_sv1
                     $openIDIdentifier = $this->getFinalOpenIDIdentifier();
                     if ($openIDIdentifier) {
                         $userRecord = $this->getUserRecord($openIDIdentifier);
-                        if ($userRecord != NULL) {
+                        if ($userRecord !== null) {
                             $this->writeLog('User \'%s\' logged in with OpenID \'%s\'',
                                 $userRecord[$this->parentObject->formfield_uname], $openIDIdentifier);
                         } else {
@@ -156,7 +156,7 @@ class ux_tx_openid_sv1 extends tx_openid_sv1
             // we must change the password in the record to a long random string so
             // that this user cannot be authenticated with other service.
             if (is_array($userRecord)) {
-                $userRecord[$this->authenticationInformation['db_user']['userident_column']] = uniqid($this->prefixId . LF, TRUE);
+                $userRecord[$this->authenticationInformation['db_user']['userident_column']] = uniqid($this->prefixId . LF, true);
             }
         }
         return $userRecord;
@@ -220,7 +220,7 @@ class ux_tx_openid_sv1 extends tx_openid_sv1
      */
     protected function getUserRecord($openIDIdentifier)
     {
-        $record = NULL;
+        $record = null;
         if ($openIDIdentifier) {
             // $openIDIdentifier always as a trailing slash because it got normalized
             // but tx_openid_openid possibly not so check for both alternatives in database
@@ -301,7 +301,7 @@ class ux_tx_openid_sv1 extends tx_openid_sv1
             t3lib_utility_Http::redirect($redirectURL, t3lib_utility_Http::HTTP_STATUS_303);
         } else {
             $formHtml = $authenticationRequest->htmlMarkup($trustedRoot,
-                $returnURL, FALSE, array('id' => 'openid_message'));
+                $returnURL, false, array('id' => 'openid_message'));
 
             // Display an error if the form markup couldn't be generated;
             // otherwise, render the HTML.
@@ -367,13 +367,13 @@ class ux_tx_openid_sv1 extends tx_openid_sv1
     protected function normalizeOpenID($openIDIdentifier)
     {
         // Strip everything with and behind the fragment delimiter character "#"
-        if (strpos($openIDIdentifier, '#') !== FALSE) {
+        if (strpos($openIDIdentifier, '#') !== false) {
             $openIDIdentifier = preg_replace('/#.*$/', '', $openIDIdentifier);
         }
 
         // A URI with a missing scheme is normalized to a http URI
         if (!preg_match('#^https?://#', $openIDIdentifier)) {
-            if (strpos($openIDIdentifier, '.') === FALSE) {
+            if (strpos($openIDIdentifier, '.') === false) {
                 // Short OpenID Authentication
                 $config = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][static::$xclassExtKey]);
                 if (trim($config['openIdProvider']) !== '') {

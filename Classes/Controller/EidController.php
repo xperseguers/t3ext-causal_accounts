@@ -45,7 +45,7 @@ class EidController
     {
         $this->init();
 
-        $allowedIps = GeneralUtility::trimExplode(',', $this->config['allowedIps'], TRUE);
+        $allowedIps = GeneralUtility::trimExplode(',', $this->config['allowedIps'], true);
 
         if ($this->config['debug']) {
             GeneralUtility::sysLog('Connection from ' . GeneralUtility::getIndpEnv('REMOTE_ADDR'), self::$extKey);
@@ -149,14 +149,14 @@ class EidController
 $output = GeneralUtility::makeInstance('Causal\\CausalAccounts\\Controller\\EidController');
 
 $ret = array(
-    'success' => TRUE,
+    'success' => true,
     'data' => array(),
     'errors' => array(),
 );
 try {
     $ret['data'] = $output->main();
 } catch (\Exception $e) {
-    $ret['success'] = FALSE;
+    $ret['success'] = false;
     $ret['errors'][] = 'Error ' . $e->getCode() . ': ' . $e->getMessage();
 }
 

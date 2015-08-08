@@ -36,26 +36,26 @@ class tx_causalaccounts_synchronizationtask extends tx_scheduler_Task
      * It MUST be implemented by all classes inheriting from this one
      * Note that there is no error handling, errors and failures are expected
      * to be handled and logged by the client implementations.
-     * Should return TRUE on successful execution, FALSE on error.
+     * Should return true on successful execution, false on error.
      *
-     * @return boolean Returns TRUE on successful execution, FALSE on error
+     * @return boolean Returns true on successful execution, false on error
      */
     public function execute()
     {
-        $success = FALSE;
+        $success = false;
         $this->init();
 
         $content = t3lib_div::getUrl($this->config['masterUrl']);
         if ($content) {
-            $response = json_decode($content, TRUE);
+            $response = json_decode($content, true);
             if ($response['success']) {
                 $key = $this->config['preSharedKey'];
                 $encrypted = $response['data'];
                 $data = rtrim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, md5($key), base64_decode($encrypted), MCRYPT_MODE_CBC, md5(md5($key))), "\0");
-                $records = json_decode($data, TRUE);
+                $records = json_decode($data, true);
                 if (count($records)) {
                     $this->synchronizeUsers($records);
-                    $success = TRUE;
+                    $success = true;
                 } else {
                     t3lib_div::sysLog('No users to be synchronized', self::$extKey, 3);
                 }
@@ -75,9 +75,9 @@ class tx_causalaccounts_synchronizationtask extends tx_scheduler_Task
     protected function synchronizeUsers(array $users)
     {
         /** @var $instance tx_saltedpasswords_salts */
-        $instance = NULL;
+        $instance = null;
         if (t3lib_extMgm::isLoaded('saltedpasswords')) {
-            $instance = tx_saltedpasswords_salts_factory::getSaltingInstance(NULL, 'BE');
+            $instance = tx_saltedpasswords_salts_factory::getSaltingInstance(null, 'BE');
         }
 
         $authorizedKeys = array_flip(array(

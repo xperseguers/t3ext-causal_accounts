@@ -45,13 +45,13 @@ class SynchronizationTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
      * It MUST be implemented by all classes inheriting from this one
      * Note that there is no error handling, errors and failures are expected
      * to be handled and logged by the client implementations.
-     * Should return TRUE on successful execution, FALSE on error.
+     * Should return true on successful execution, false on error.
      *
-     * @return boolean Returns TRUE on successful execution, FALSE on error
+     * @return boolean Returns true on successful execution, false on error
      */
     public function execute()
     {
-        $success = FALSE;
+        $success = false;
         $this->init();
 
         /** @var \TYPO3\CMS\Core\Registry $registry */
@@ -62,15 +62,15 @@ class SynchronizationTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
             $lockUntil = time() - $this->config['updateInterval'] + self::LOCK_INTERVAL;
             $registry->set(static::$package, 'synchronisationLock', $lockUntil);
 
-            $response = json_decode($content, TRUE);
+            $response = json_decode($content, true);
             if ($response['success']) {
                 $key = $this->config['preSharedKey'];
                 $encrypted = $response['data'];
                 $data = rtrim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, md5($key), base64_decode($encrypted), MCRYPT_MODE_CBC, md5(md5($key))), "\0");
-                $records = json_decode($data, TRUE);
+                $records = json_decode($data, true);
                 if (count($records)) {
                     $this->synchronizeUsers($records);
-                    $success = TRUE;
+                    $success = true;
                 } else {
                     GeneralUtility::sysLog('No users to be synchronized', self::$extKey, 3);
                 }
@@ -90,9 +90,9 @@ class SynchronizationTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
     protected function synchronizeUsers(array $users)
     {
         /** @var \TYPO3\CMS\Saltedpasswords\Salt\SaltInterface $instance */
-        $instance = NULL;
+        $instance = null;
         if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('saltedpasswords')) {
-            $instance = \TYPO3\CMS\Saltedpasswords\Salt\SaltFactory::getSaltingInstance(NULL, 'BE');
+            $instance = \TYPO3\CMS\Saltedpasswords\Salt\SaltFactory::getSaltingInstance(null, 'BE');
         }
 
         $authorizedKeys = array_flip(array(

@@ -50,12 +50,12 @@ class OpenidService extends \TYPO3\CMS\Openid\OpenidService
     protected function normalizeOpenID($openIDIdentifier)
     {
         // Strip everything with and behind the fragment delimiter character "#"
-        if (strpos($openIDIdentifier, '#') !== FALSE) {
+        if (strpos($openIDIdentifier, '#') !== false) {
             $openIDIdentifier = preg_replace('/#.*$/', '', $openIDIdentifier);
         }
         // A URI with a missing scheme is normalized to a http URI
         if (!preg_match('#^https?://#', $openIDIdentifier)) {
-            if (strpos($openIDIdentifier, '.') === FALSE) {
+            if (strpos($openIDIdentifier, '.') === false) {
                 // Short OpenID Authentication
                 $config = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][static::$xclassExtKey]);
                 if (trim($config['openIdProvider']) !== '') {
@@ -124,15 +124,15 @@ class OpenidService extends \TYPO3\CMS\Openid\OpenidService
     /**
      * Injects extension configuration into $this->config
      *
-     * @return bool TRUE if operation succeeded, otherwise FALSE
+     * @return bool true if operation succeeded, otherwise false
      */
     protected function initConfiguration()
     {
         $this->config = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][static::$xclassExtKey]);
         if (!is_array($this->config) || !isset($this->config['updateInterval'])) {
-            return FALSE;
+            return false;
         }
-        return TRUE;
+        return true;
     }
 
 }
