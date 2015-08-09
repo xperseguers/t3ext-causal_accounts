@@ -29,10 +29,10 @@ class ux_tx_openid_sv1 extends tx_openid_sv1
 {
 
     /** @var string */
-    static protected $xclassExtKey = 'causal_accounts';
+    protected static $xclassExtKey = 'causal_accounts';
 
     /** @var string */
-    static protected $xclassPackage = 'tx_causalaccounts';
+    protected static $xclassPackage = 'tx_causalaccounts';
 
     /**
      * @var string OpenID identifier after it has been normalized.

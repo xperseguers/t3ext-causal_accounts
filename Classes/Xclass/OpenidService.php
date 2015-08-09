@@ -30,10 +30,10 @@ class OpenidService extends \TYPO3\CMS\Openid\OpenidService
 {
 
     /** @var string */
-    static protected $xclassExtKey = 'causal_accounts';
+    protected static $xclassExtKey = 'causal_accounts';
 
     /** @var string */
-    static protected $xclassPackage = 'tx_causalaccounts';
+    protected static $xclassPackage = 'tx_causalaccounts';
 
     /**
      * @var array Contains the configuration values.
