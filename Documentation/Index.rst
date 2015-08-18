@@ -68,4 +68,3 @@ Central Account Management
 	KnownProblems/Index
 	ToDoList/Index
 	ChangeLog/Index
-	Targets
