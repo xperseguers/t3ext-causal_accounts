@@ -59,12 +59,12 @@ Central Account Management
 	**Table of Contents**
 
 .. toctree::
-	:maxdepth: 5
+	:maxdepth: 3
 	:titlesonly:
-	:glob:
 
 	Introduction/Index
 	AdministratorManual/Index
 	KnownProblems/Index
 	ToDoList/Index
 	ChangeLog/Index
+	Links
