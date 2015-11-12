@@ -16,8 +16,12 @@ namespace Causal\CausalAccounts\Xclass;
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
+if (version_compare(TYPO3_version, '6.0.0', '>=') && (version_compare(TYPO3_version, '7.6.0', '<'))) {
+  require_once __DIR__.'/../6x/62_compatibility_layer.php';
+}
+
 /**
- * Extends \TYPO3\CMS\Openid\OpenidService to support short OpenID authentication.
+ * Extends \FoT3\Openid\OpenidService to support short OpenID authentication.
  *
  * @category    XCLASS
  * @package     TYPO3
@@ -26,7 +30,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * @copyright   Causal Sàrl
  * @license     http://www.gnu.org/copyleft/gpl.html
  */
-class OpenidService extends \TYPO3\CMS\Openid\OpenidService
+class OpenidService extends \FoT3\Openid\OpenidService
 {
 
     /** @var string */
