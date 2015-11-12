@@ -11,10 +11,17 @@ if (is_array($config)) {
             $GLOBALS['TYPO3_CONF_VARS']['FE']['eID_include'][$_EXTKEY] = 'EXT:' . $_EXTKEY . '/Classes/Controller/EidController.php';
         }
 
-        // Register XCLASS to allow shorter form of OpenID authentication
-        $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['TYPO3\\CMS\\Openid\\OpenidService'] = array(
-            'className' => 'Causal\\CausalAccounts\\Xclass\\OpenidService',
-        );
+        if (version_compare(TYPO3_version, '7.6.0', '>=')) {
+            // Register XCLASS to allow shorter form of OpenID authentication
+            $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['FoT3\\Openid\\OpenidService'] = array(
+                'className' => 'Causal\\CausalAccounts\\Xclass\\OpenidService',
+            );
+        } else {
+            // Register XCLASS to allow shorter form of OpenID authentication
+            $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['TYPO3\\CMS\\Openid\\OpenidService'] = array(
+                'className' => 'Causal\\CausalAccounts\\Xclass\\OpenidService',
+            );
+        }
 
         if ($config['mode'] === 'S' || \TYPO3\CMS\Core\Utility\GeneralUtility::getIndpEnv('REMOTE_ADDR') === '127.0.0.1') {
             // Register the synchronization scheduler task
