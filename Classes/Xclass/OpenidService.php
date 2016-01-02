@@ -16,8 +16,8 @@ namespace Causal\CausalAccounts\Xclass;
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-if (version_compare(TYPO3_version, '6.0.0', '>=') && (version_compare(TYPO3_version, '7.6.0', '<'))) {
-  require_once __DIR__.'/../6x/62_compatibility_layer.php';
+if (version_compare(TYPO3_version, '6.0', '>=') && (version_compare(TYPO3_version, '7.6', '<'))) {
+  require_once(__DIR__ . '/../6x/62_compatibility_layer.php');
 }
 
 /**

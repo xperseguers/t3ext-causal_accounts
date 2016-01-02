@@ -3,7 +3,7 @@ defined('TYPO3_MODE') || die();
 
 $config = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$_EXTKEY]);
 if (is_array($config)) {
-    if (version_compare(TYPO3_version, '6.0.0', '>=')) {
+    if (version_compare(TYPO3_version, '6.0', '>=')) {
         // Registration for TYPO3 6.x
 
         if ($config['mode'] === 'M') {
@@ -11,7 +11,7 @@ if (is_array($config)) {
             $GLOBALS['TYPO3_CONF_VARS']['FE']['eID_include'][$_EXTKEY] = 'EXT:' . $_EXTKEY . '/Classes/Controller/EidController.php';
         }
 
-        if (version_compare(TYPO3_version, '7.6.0', '>=')) {
+        if (version_compare(TYPO3_version, '7.6', '>=')) {
             // Register XCLASS to allow shorter form of OpenID authentication
             $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['FoT3\\Openid\\OpenidService'] = array(
                 'className' => 'Causal\\CausalAccounts\\Xclass\\OpenidService',

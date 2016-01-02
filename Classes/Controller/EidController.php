@@ -51,7 +51,7 @@ class EidController
             GeneralUtility::sysLog('Connection from ' . GeneralUtility::getIndpEnv('REMOTE_ADDR'), self::$extKey);
         }
 
-        if ($this->config['mode'] !== 'M' || (count($allowedIps) && !GeneralUtility::inArray($allowedIps, GeneralUtility::getIndpEnv('REMOTE_ADDR')))) {
+        if ($this->config['mode'] !== 'M' || (count($allowedIps) && !in_array(GeneralUtility::getIndpEnv('REMOTE_ADDR'), $allowedIps))) {
             $this->denyAccess();
         }
 
