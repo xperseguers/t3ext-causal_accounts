@@ -55,6 +55,11 @@ class EidController
             $this->denyAccess();
         }
 
+        // Initialize TCA (method handles if not already initialized)
+        if (version_compare(TYPO3_version, '7.6', '>=')) {
+            \TYPO3\CMS\Frontend\Utility\EidUtility::initTCA();
+        }
+
         $this->initTSFE();
 
         if (!empty($this->config['synchronizeDeletedAccounts']) && $this->config['synchronizeDeletedAccounts']) {
