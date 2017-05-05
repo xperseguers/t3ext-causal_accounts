@@ -14,6 +14,9 @@ Links
 :TER:
 	https://typo3.org/extensions/repository/view/causal_accounts
 
+:Packagist:
+	https://packagist.org/packages/causal/causal_accounts
+
 :Bug Tracker:
 	https://github.com/xperseguers/t3ext-causal_accounts/issues
 
