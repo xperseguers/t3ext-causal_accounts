@@ -10,7 +10,7 @@
  * writing. "version" and "dependencies" must not be touched!
  ***************************************************************/
 
-$EM_CONF[$_EXTKEY] = array(
+$EM_CONF[$_EXTKEY] = [
     'title' => 'Central Account Management',
     'description' => 'This extension allows TYPO3 administrator accounts to be managed centrally and automatically synchronized with remote websites using a secure link. No need for complex LDAP / ActiveDirectory infrastructure.',
     'category' => 'services',
