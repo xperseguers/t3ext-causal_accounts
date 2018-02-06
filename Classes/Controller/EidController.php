@@ -32,6 +32,9 @@ class EidController
     /** @var string */
     protected static $extKey = 'causal_accounts';
 
+    /** @var string */
+    protected static $cipher = 'AES-128-CBC';
+
     /** @var array */
     protected $config;
 
@@ -78,8 +81,12 @@ class EidController
         if (count($administrators)) {
             $key = $this->config['preSharedKey'];
             $data = json_encode($administrators);
-            $encrypted = mcrypt_encrypt(MCRYPT_RIJNDAEL_256, md5($key), $data, MCRYPT_MODE_CBC, md5(md5($key)));
-            $encrypted = base64_encode($encrypted);
+
+            $ivLength = openssl_cipher_iv_length(self::$cipher);
+            $iv = openssl_random_pseudo_bytes($ivLength);
+            $cipherTextRaw = openssl_encrypt($data, self::$cipher, md5($key), OPENSSL_RAW_DATA, $iv);
+            $hmac = hash_hmac('sha256', $cipherTextRaw, $key, true);
+            $encrypted = base64_encode($iv . $hmac . $cipherTextRaw);
 
             return $encrypted;
         } else {

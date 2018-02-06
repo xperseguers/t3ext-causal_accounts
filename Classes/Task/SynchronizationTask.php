@@ -37,6 +37,12 @@ class SynchronizationTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
     /** @var string */
     protected static $package = 'tx_causalaccounts';
 
+    /** @var string */
+    protected static $cipher = 'AES-128-CBC';
+
+    /** @var int */
+    protected static $sha2Length = 32;
+
     /** @var array */
     protected $config;
 
@@ -58,21 +64,33 @@ class SynchronizationTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
         $registry = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Registry');
         $syncLock = $registry->get(static::$package, 'synchronisationLock');
         $content = GeneralUtility::getUrl($this->config['masterUrl']);
+
         if ($content && ($syncLock === 0 || $syncLock < time())) {
             $lockUntil = time() - $this->config['updateInterval'] + self::LOCK_INTERVAL;
             $registry->set(static::$package, 'synchronisationLock', $lockUntil);
-
             $response = json_decode($content, true);
-            if ($response['success']) {
+
+            if (isset($response['success']) && $response['success'] === true) {
                 $key = $this->config['preSharedKey'];
                 $encrypted = $response['data'];
-                $data = rtrim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, md5($key), base64_decode($encrypted), MCRYPT_MODE_CBC, md5(md5($key))), "\0");
-                $records = json_decode($data, true);
-                if (count($records)) {
-                    $this->synchronizeUsers($records);
-                    $success = true;
+                $decoded = base64_decode($encrypted);
+                $ivLength = openssl_cipher_iv_length(self::$cipher);
+                $iv = substr($decoded, 0, $ivLength);
+                $hmac = substr($decoded, $ivLength, self::$sha2Length);
+                $cipherTextRaw = substr($decoded, $ivLength + self::$sha2Length);
+                $data = openssl_decrypt($cipherTextRaw, self::$cipher, md5($key), OPENSSL_RAW_DATA, $iv);
+                $calculatedMac = hash_hmac('sha256', $cipherTextRaw, $key, true);
+
+                if (hash_equals($hmac, $calculatedMac)) {
+                    $records = json_decode($data, true);
+                    if (count($records)) {
+                        $this->synchronizeUsers($records);
+                        $success = true;
+                    } else {
+                        GeneralUtility::sysLog('No users to be synchronized', self::$extKey, 3);
+                    }
                 } else {
-                    GeneralUtility::sysLog('No users to be synchronized', self::$extKey, 3);
+                    GeneralUtility::sysLog('Hash invalid', self::$extKey, 3);
                 }
             } else {
                 GeneralUtility::sysLog($response['errors'][0], self::$extKey, 3);
